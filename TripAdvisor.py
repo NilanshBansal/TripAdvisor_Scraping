@@ -9,6 +9,7 @@ import csv
 import json
 import math
 import os.path
+import chardet
 
 headers=[
         ('Host', "tripadvisor.in"),
@@ -54,7 +55,9 @@ response=opener.open(url)
 
 content=response.read()
 
-data = json.loads(content)
+#data = json.loads(content)
+data = json.loads(content.decode(chardet.detect(content)["encoding"]))
+
 
 for result in data['results']:
     url = 'https://www.tripadvisor.in' + result['url']
