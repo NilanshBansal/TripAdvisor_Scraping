@@ -107,10 +107,7 @@ for result in data['results']:
             review = {}
             review_count+=1
             review['id'] = review_count
-            try:
-                review['review-div'] = review_div
-            except:
-                review['review-div'] = 'NOOO'
+            
             try:
                 review['title'] = review_div.find('span',{'class':'noQuotes'}).text
             except:
@@ -120,8 +117,10 @@ for result in data['results']:
             except: 
                 review['review'] = 'Not-found'
             try:
-                review['rating'] = int(review_div.find('div',{'class':'ratingInfo'}).span['class'][1].split('_')[1])/10
-                # review['rating'] = review_div.find('div',{'class':'ratingInfo'})
+                if review_div.find('div',{'class':'ratingInfo'}):
+                    review['rating'] = int(review_div.find('div',{'class':'ratingInfo'}).span['class'][1].split('_')[1])/10
+                else:
+                    review['rating'] = int(review_div.find('span',{'class':'ui_bubble_rating'})['class'][1].split('_')[1])/10
             except:
                 review['rating'] = 'Not-found'
             try:
