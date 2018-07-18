@@ -48,7 +48,7 @@ opener.addheaders=headers
 
 query = input('Enter place name : ')
 limit = input('Enter no of places to scrape reviews from : ')
-
+query = urllib.parse.quote_plus(query)
 url='https://www.tripadvisor.in/TypeAheadJson?action=API&types=attr&urlList=false&query=' + query + '&max=' + limit +'&uiOrigin=trip_search_Attractions&source=trip_search_Attractions'
 
 response=opener.open(url)
