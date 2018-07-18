@@ -10,6 +10,14 @@ import json
 import math
 import os.path
 import chardet
+import datetime
+from time import strptime
+# print(datetime.datetime.now().strftime ("%d-%m-%Y"))
+# print("5 days ago")
+# print((datetime.datetime.now()-datetime.timedelta(days=5)).strftime ("%d-%m-%Y"))
+# print("1 weeks ago")
+# print((datetime.datetime.now()-datetime.timedelta(weeks=1)).strftime ("%d-%m-%Y"))
+
 
 headers=[
         ('Host', "tripadvisor.in"),
@@ -112,7 +120,35 @@ for result in data['results']:
             except:
                 review['rating'] = 'Not-found'
             try:
-                review['date'] = review_div.find('div',{'class':'ratingInfo'}).find('span',{'class':'ratingDate'}).text.strip()
+                date_string = review_div.find('div',{'class':'ratingInfo'}).find('span',{'class':'ratingDate'}).text.strip()
+                date_type='days'
+                month_number = 0
+                no=None
+                if date_string.find('ago') != -1:
+                    no = date_string.split(' ')[1]
+                    if date_string.find('day') != -1:
+                        date_type='days'
+                    elif date_string.find('week') != -1:
+                        date_type='weeks'
+                                            
+                elif date_string.find('yesterday'):
+                    date_type = 'days'
+                    no = 1
+
+                if no is not None:
+                    if date_type == 'days':
+                        print('DAYS')
+                        review['date'] = (datetime.datetime.now()-datetime.timedelta(days=int(no))).strftime ("%d-%m-%Y")
+                        print(review['date'])
+
+                    else:
+                        print('WEEKS')
+                        review['date'] = (datetime.datetime.now()-datetime.timedelta(weeks=int(no))).strftime ("%d-%m-%Y")
+                        print(review['date'])
+                else:
+                    month_number = strptime(date_string.split(' ')[2],'%B').tm_mon
+                    date_string = date_string.split(' ')[1] +  ' ' + month_number + ' ' + date_string.split(' ')[3]
+                    review['date'] = datetime.datetime.strptime(date_string, '%d %m %Y').strftime ("%d-%m-%Y")
             except:
                 review['date'] = 'Not-found'
             try:
