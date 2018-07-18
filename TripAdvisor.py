@@ -108,6 +108,10 @@ for result in data['results']:
             review_count+=1
             review['id'] = review_count
             try:
+                review['review-div'] = review_div
+            except:
+                review['review-div'] = 'NOOO'
+            try:
                 review['title'] = review_div.find('span',{'class':'noQuotes'}).text
             except:
                 review['title'] = 'Not-found'
@@ -117,10 +121,14 @@ for result in data['results']:
                 review['review'] = 'Not-found'
             try:
                 review['rating'] = int(review_div.find('div',{'class':'ratingInfo'}).span['class'][1].split('_')[1])/10
+                # review['rating'] = review_div.find('div',{'class':'ratingInfo'})
             except:
                 review['rating'] = 'Not-found'
             try:
-                date_string = review_div.find('div',{'class':'ratingInfo'}).find('span',{'class':'ratingDate'}).text.strip()
+                if review_div.find('div',{'class':'ratingInfo'}):
+                    date_string = review_div.find('div',{'class':'ratingInfo'}).find('span',{'class':'ratingDate'}).text.strip()
+                else:
+                    date_string = review_div.find('span',{'class':'ratingDate'}).text.strip()
                 date_type='days'
                 month_number = 0
                 no=None
@@ -148,10 +156,13 @@ for result in data['results']:
             except:
                 review['date'] = 'Not-found'
             try:
-                review['user_name'] = review_div.find('div',{'class':'userInfo'}).find('span').text.strip()
+                if review_div.find('div',{'class':'userInfo'}):
+                    review['user_name'] = review_div.find('div',{'class':'userInfo'}).find('span').text.strip()
+                else:
+                    review['user_name'] = review_div.find('div',{'class':'info_text'}).find('div').text.strip()
             except:
                 review['user_name'] = 'Not-found'
-            
+                        
             try:
                 review['review_likes'] = review_div.find('span',{'class':'numHelp'}).text.strip()
             except:
