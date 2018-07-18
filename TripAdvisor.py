@@ -99,8 +99,8 @@ for result in data['results']:
         soup=BeautifulSoup(content)
         review_container = soup.findAll('div',{'class':'review-container'})
         print('No of reviews: ',len(review_container))
-        if(len(review_container) == 0):
-            print(content)
+        # if(len(review_container) == 0):
+        #     print(content)
         
         count = 0
         for review_div in review_container:
@@ -131,23 +131,19 @@ for result in data['results']:
                     elif date_string.find('week') != -1:
                         date_type='weeks'
                                             
-                elif date_string.find('yesterday'):
+                elif date_string.find('yesterday') != -1:
                     date_type = 'days'
                     no = 1
 
                 if no is not None:
                     if date_type == 'days':
-                        print('DAYS')
                         review['date'] = (datetime.datetime.now()-datetime.timedelta(days=int(no))).strftime ("%d-%m-%Y")
-                        print(review['date'])
 
                     else:
-                        print('WEEKS')
                         review['date'] = (datetime.datetime.now()-datetime.timedelta(weeks=int(no))).strftime ("%d-%m-%Y")
-                        print(review['date'])
                 else:
                     month_number = strptime(date_string.split(' ')[2],'%B').tm_mon
-                    date_string = date_string.split(' ')[1] +  ' ' + month_number + ' ' + date_string.split(' ')[3]
+                    date_string = date_string.split(' ')[1] +  ' ' + str(month_number) + ' ' + date_string.split(' ')[3]
                     review['date'] = datetime.datetime.strptime(date_string, '%d %m %Y').strftime ("%d-%m-%Y")
             except:
                 review['date'] = 'Not-found'
