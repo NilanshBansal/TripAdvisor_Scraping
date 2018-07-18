@@ -98,30 +98,28 @@ for result in data['results']:
         for review_div in review_container:
             review = {}
             review_count+=1
-            review['S.NO'] = review_count
+            review['id'] = review_count
             try:
-                review['review_heading'] = review_div.find('span',{'class':'noQuotes'}).text
+                review['title'] = review_div.find('span',{'class':'noQuotes'}).text
             except:
-                review['review_heading'] = 'Not-found'
+                review['title'] = 'Not-found'
             try:
-                review['review_text'] = review_div.find('p',{'class':'partial_entry'}).text
+                review['review'] = review_div.find('p',{'class':'partial_entry'}).text
             except: 
-                review['review_text'] = 'Not-found'
-
+                review['review'] = 'Not-found'
+            try:
+                review['rating'] = int(review_div.find('div',{'class':'ratingInfo'}).span['class'][1].split('_')[1])/10
+            except:
+                review['rating'] = 'Not-found'
+            try:
+                review['date'] = review_div.find('div',{'class':'ratingInfo'}).find('span',{'class':'ratingDate'}).text.strip()
+            except:
+                review['date'] = 'Not-found'
             try:
                 review['user_name'] = review_div.find('div',{'class':'userInfo'}).find('span').text.strip()
             except:
                 review['user_name'] = 'Not-found'
             
-            try:
-                review['review_rating'] = int(review_div.find('div',{'class':'ratingInfo'}).span['class'][1].split('_')[1])/10
-            except:
-                review['review_rating'] = 'Not-found'
-            
-            try:
-                review['review_date'] = review_div.find('div',{'class':'ratingInfo'}).find('span',{'class':'ratingDate'}).text.strip()
-            except:
-                review['review_date'] = 'Not-found'
             try:
                 review['review_likes'] = review_div.find('span',{'class':'numHelp'}).text.strip()
             except:
